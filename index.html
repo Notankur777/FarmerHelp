@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 Farm Helper</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #FFF7E8, #FFD8A8);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #FFA500;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        main {
+            padding: 30px 10px;
+        }
+
+        section {
+            background-color: #FFF3E0;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+
+        button {
+            background-color: #FFA500;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #FF8C00;
+            transform: scale(1.1);
+        }
+
+        footer {
+            background-color: #FFA500;
+            color: white;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Welcome overlay */
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #welcome-box {
+            background-color: #fff3e0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 1s;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating assistant button */
+        #assistant-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #FFA500;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        #assistant-btn:hover {
+            transform: scale(1.2);
+            background-color: #FF8C00;
+        }
+
+        /* Assistant panel */
+        #assistant-panel {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 300px;
+            height: 400px;
+            background-color: #fff3e0;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: none; /* hidden initially */
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            z-index: 998;
+        }
+
+        /* Mic button inside panel */
+        #mic-btn {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #FFA500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        #mic-btn:hover {
+            transform: scale(1.2);
+            background-color: #FF8C00;
+        }
+
+        /* Icon inside buttons */
+        #assistant-btn img, #mic-btn img {
+            width: 60%;
+            height: 60%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Welcome Overlay -->
+<div id="welcome-overlay">
+    <div id="welcome-box">
+        <h2 id="welcome-title">👋 Welcome to Farm Helper</h2>
+        <p id="welcome-text">Please select your language to continue:</p>
+        <select id="language-select">
+            <option value="en">English 🇮🇳</option>
+            <option value="hi">Hindi 🇮🇳</option>
+            <option value="ta">Tamil 🇮🇳</option>
+            <option value="te">Telugu 🇮🇳</option>
+            <option value="bn">Bengali 🇮🇳</option>
+        </select>
+        <br>
+        <button id="continue-btn">Continue</button>
+    </div>
+</div>
+
+<header>
+    <h1 id="header-title">🌾 Farm Helper</h1>
+    <p id="header-text">Helping farmers through voice, images & icons 🚜🌱</p>
+</header>
+
+<main>
+    <section id="voice-section">
+        <h2 id="voice-title">🎙 Voice Assistance</h2>
+        <p id="voice-text">Ask your questions using voice in your language.</p>
+        <button id="voice-btn">Start Voice</button>
+    </section>
+
+    <section id="image-section">
+        <h2 id="image-title">📸 Crop Diagnosis</h2>
+        <p id="image-text">Upload a picture of your crop to check for diseases.</p>
+        <button id="image-btn">Upload Image</button>
+    </section>
+
+    <section id="icons-section">
+        <h2 id="icons-title">🌦 Quick Access</h2>
+        <p id="icons-text">Weather, mandi prices, and government schemes at one click.</p>
+        <button id="weather-btn">Weather</button>
+        <button id="mandi-btn">Mandi Prices</button>
+        <button id="gov-btn">Government Schemes</button>
+    </section>
+</main>
+
+<footer>
+    <button id="about-btn">About Us</button>
+    <button id="contact-btn">Contact</button>
+    <button id="help-btn">Help</button>
+    <p id="footer-text">© 2025 Farm Helper | Made with ❤️ for Farmers</p>
+</footer>
+
+<!-- Floating assistant button -->
+<div id="assistant-btn">
+    <img src="assistant-icon.png" alt="Assistant">
+</div>
+
+<!-- Assistant panel -->
+<div id="assistant-panel">
+    <p>Hello! I am your farm assistant 🤖</p>
+    <p id="voice-output" style="margin-top:20px;color:#333;font-weight:bold;"></p>
+    <div id="mic-btn">
+        <img src="mic-icon.png" alt="Mic">
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const langData = {
+        en: {
+            welcomeTitle: "👋 Welcome to Farm Helper",
+            welcomeText: "Please select your language to continue:",
+            headerTitle: "🌾 Farm Helper",
+            headerText: "Helping farmers through voice, images & icons 🚜🌱",
+            voiceTitle: "🎙 Voice Assistance",
+            voiceText: "Ask your questions using voice in your language.",
+            voiceBtn: "Start Voice",
+            imageTitle: "📸 Crop Diagnosis",
+            imageText: "Upload a picture of your crop to check for diseases.",
+            imageBtn: "Upload Image",
+            iconsTitle: "🌦 Quick Access",
+            iconsText: "Weather, mandi prices, and government schemes at one click.",
+            weatherBtn: "Weather",
+            mandiBtn: "Mandi Prices",
+            govBtn: "Government Schemes",
+            footerText: "© 2025 Farm Helper | Made with ❤️ for Farmers",
+            aboutBtn: "About Us",
+            contactBtn: "Contact",
+            helpBtn: "Help"
+        },
+        hi: {
+            welcomeTitle: "👋 फार्म हेल्पर में आपका स्वागत है",
+            welcomeText: "कृपया जारी रखने के लिए भाषा चुनें:",
+            headerTitle: "🌾 फार्म हेल्पर",
+            headerText: "वॉइस, इमेज और आइकॉन्स के माध्यम से किसानों की मदद 🚜🌱",
+            voiceTitle: "🎙 वॉइस सहायता",
+            voiceText: "अपनी भाषा में वॉइस के माध्यम से सवाल पूछें।",
+            voiceBtn: "वॉइस शुरू करें",
+            imageTitle: "📸 फसल निदान",
+            imageText: "फसल की बीमारी जांचने के लिए तस्वीर अपलोड करें।",
+            imageBtn: "इमेज अपलोड करें",
+            iconsTitle: "🌦 त्वरित पहुँच",
+            iconsText: "मौसम, मंडी मूल्य और सरकारी योजनाएँ एक क्लिक पर।",
+            weatherBtn: "मौसम",
+            mandiBtn: "मंडी मूल्य",
+            govBtn: "सरकारी योजनाएँ",
+            footerText: "© 2025 फार्म हेल्पर | किसानों के लिए ❤️ से बनाया गया",
+            aboutBtn: "हमारे बारे में",
+            contactBtn: "संपर्क करें",
+            helpBtn: "मदद"
+        }
+    };
+
+    const continueBtn = document.getElementById('continue-btn');
+    const languageSelect = document.getElementById('language-select');
+
+    continueBtn.addEventListener('click', function(){
+        const selectedLang = languageSelect.value;
+        const data = langData[selectedLang];
+        if(data){
+            document.getElementById('header-title').innerText = data.headerTitle;
+            document.getElementById('header-text').innerText = data.headerText;
+            document.getElementById('voice-title').innerText = data.voiceTitle;
+            document.getElementById('voice-text').innerText = data.voiceText;
+            document.getElementById('voice-btn').innerText = data.voiceBtn;
+            document.getElementById('image-title').innerText = data.imageTitle;
+            document.getElementById('image-text').innerText = data.imageText;
+            document.getElementById('image-btn').innerText = data.imageBtn;
+            document.getElementById('icons-title').innerText = data.iconsTitle;
+            document.getElementById('icons-text').innerText = data.iconsText;
+            document.getElementById('weather-btn').innerText = data.weatherBtn;
+            document.getElementById('mandi-btn').innerText = data.mandiBtn;
+            document.getElementById('gov-btn').innerText = data.govBtn;
+            document.getElementById('footer-text').innerText = data.footerText;
+            document.getElementById('about-btn').innerText = data.aboutBtn;
+            document.getElementById('contact-btn').innerText = data.contactBtn;
+            document.getElementById('help-btn').innerText = data.helpBtn;
+            document.getElementById('welcome-overlay').style.display = 'none';
+        }
+    });
+
+    // Floating Assistant Panel toggle
+    const assistantBtn = document.getElementById('assistant-btn');
+    const assistantPanel = document.getElementById('assistant-panel');
+
+    assistantBtn.addEventListener('click', () => {
+        assistantPanel.style.display = (assistantPanel.style.display === 'flex') ? 'none' : 'flex';
+    });
+
+    // Voice recognition functionality
+    const micBtn = document.getElementById('mic-btn');
+    const voiceOutput = document.getElementById('voice-output');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+
+        micBtn.addEventListener('click', () => {
+            voiceOutput.innerText = "Listening... 🎙️";
+            recognition.start();
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            voiceOutput.innerText = "You said: " + transcript;
+        };
+
+        recognition.onerror = (event) => {
+            voiceOutput.innerText = "Error: " + event.error;
+        };
+    } else {
+        voiceOutput.innerText = "Your browser does not support voice recognition.";
+    }
+});
+</script>
+</body>
+</html>
